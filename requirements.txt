@@ -16,6 +16,8 @@ spacy
 beautifulsoup4
 requests
 lxml
+selenium
+webdriver-manager
 
 # Database
 sqlalchemy
