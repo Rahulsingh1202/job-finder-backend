@@ -14,13 +14,13 @@ import fitz  # PyMuPDF
 import json
 import os
 from dotenv import load_dotenv
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+# from selenium import webdriver
+# from selenium.webdriver.common.by import By
+# from selenium.webdriver.chrome.options import Options
+# from selenium.webdriver.support.ui import WebDriverWait
+# from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
-import time
+import time 
 
 
 # Import authentication
@@ -235,84 +235,84 @@ def parse_resume_with_gemini(resume_text: str) -> dict:
         }
 
 
-def scrape_linkedin_jobs(skills: List[str], location: str, experience_years: int, max_jobs: int = 10) -> List[dict]:
-    """Scrape LinkedIn jobs based on skills and experience"""
+# def scrape_linkedin_jobs(skills: List[str], location: str, experience_years: int, max_jobs: int = 10) -> List[dict]:
+#     """Scrape LinkedIn jobs based on skills and experience"""
     
-    chrome_options = Options()
-    chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
+#     chrome_options = Options()
+#     chrome_options.add_argument("--headless")
+#     chrome_options.add_argument("--no-sandbox")
+#     chrome_options.add_argument("--disable-dev-shm-usage")
+#     chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
     
-    driver = webdriver.Chrome(options=chrome_options)
-    jobs = []
+#     driver = webdriver.Chrome(options=chrome_options)
+#     jobs = []
     
-    try:
-        # Determine experience level
-        if experience_years == 0:
-            experience_level = "Internship"
-        elif experience_years <= 2:
-            experience_level = "Entry level"
-        elif experience_years <= 5:
-            experience_level = "Associate"
-        else:
-            experience_level = "Mid-Senior level"
+#     try:
+#         # Determine experience level
+#         if experience_years == 0:
+#             experience_level = "Internship"
+#         elif experience_years <= 2:
+#             experience_level = "Entry level"
+#         elif experience_years <= 5:
+#             experience_level = "Associate"
+#         else:
+#             experience_level = "Mid-Senior level"
         
-        # Build search query
-        skills_query = " ".join(skills[:3])
-        search_query = f"{skills_query} {experience_level}"
-        encoded_query = search_query.replace(" ", "%20")
-        encoded_location = location.replace(" ", "%20")
+#         # Build search query
+#         skills_query = " ".join(skills[:3])
+#         search_query = f"{skills_query} {experience_level}"
+#         encoded_query = search_query.replace(" ", "%20")
+#         encoded_location = location.replace(" ", "%20")
         
-        url = f"https://www.linkedin.com/jobs/search/?keywords={encoded_query}&location={encoded_location}"
+#         url = f"https://www.linkedin.com/jobs/search/?keywords={encoded_query}&location={encoded_location}"
         
-        print(f"Searching LinkedIn: {url}")
-        driver.get(url)
-        time.sleep(5)
+#         print(f"Searching LinkedIn: {url}")
+#         driver.get(url)
+#         time.sleep(5)
         
-        # Scroll to load more jobs
-        for scroll_count in range(10):  # Changed variable name from i to scroll_count
-            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-            time.sleep(2)
-            print(f"Scroll {scroll_count + 1}/10 completed...")
+#         # Scroll to load more jobs
+#         for scroll_count in range(10):  # Changed variable name from i to scroll_count
+#             driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+#             time.sleep(2)
+#             print(f"Scroll {scroll_count + 1}/10 completed...")
         
-        # Parse page
-        soup = BeautifulSoup(driver.page_source, 'html.parser')
-        job_cards = soup.find_all('div', class_='base-card')
+#         # Parse page
+#         soup = BeautifulSoup(driver.page_source, 'html.parser')
+#         job_cards = soup.find_all('div', class_='base-card')
         
-        print(f"Found {len(job_cards)} job cards on page")
+#         print(f"Found {len(job_cards)} job cards on page")
         
-        for card in job_cards[:max_jobs * 2]:
-            try:
-                title_elem = card.find('h3', class_='base-search-card__title')
-                company_elem = card.find('h4', class_='base-search-card__subtitle')
-                location_elem = card.find('span', class_='job-search-card__location')
-                link_elem = card.find('a', class_='base-card__full-link')
+#         for card in job_cards[:max_jobs * 2]:
+#             try:
+#                 title_elem = card.find('h3', class_='base-search-card__title')
+#                 company_elem = card.find('h4', class_='base-search-card__subtitle')
+#                 location_elem = card.find('span', class_='job-search-card__location')
+#                 link_elem = card.find('a', class_='base-card__full-link')
                 
-                if title_elem and company_elem and link_elem:
-                    job = {
-                        "title": title_elem.text.strip(),
-                        "company": company_elem.text.strip(),
-                        "location": location_elem.text.strip() if location_elem else location,
-                        "link": link_elem['href'],
-                        "experience_level": experience_level
-                    }
-                    jobs.append(job)
+#                 if title_elem and company_elem and link_elem:
+#                     job = {
+#                         "title": title_elem.text.strip(),
+#                         "company": company_elem.text.strip(),
+#                         "location": location_elem.text.strip() if location_elem else location,
+#                         "link": link_elem['href'],
+#                         "experience_level": experience_level
+#                     }
+#                     jobs.append(job)
                     
-            except Exception as e:
-                print(f"Error parsing job card: {str(e)}")
-                continue
+#             except Exception as e:
+#                 print(f"Error parsing job card: {str(e)}")
+#                 continue
         
-        print(f"Successfully parsed {len(jobs)} jobs")
+#         print(f"Successfully parsed {len(jobs)} jobs")
         
-    except Exception as e:
-        print(f"Error scraping LinkedIn: {str(e)}")
+#     except Exception as e:
+#         print(f"Error scraping LinkedIn: {str(e)}")
         
-    finally:
-        driver.quit()
+#     finally:
+#         driver.quit()
     
-    # Return up to max_jobs
-    return jobs[:max_jobs]
+#     # Return up to max_jobs
+#     return jobs[:max_jobs]
 
 
 # API Endpoints
@@ -479,47 +479,19 @@ async def search_jobs(
     current_user: dict = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    """Search for jobs on LinkedIn based on skills and experience (AUTHENTICATED)"""
+    """Search for jobs - currently disabled in production"""
     
-    user_email = current_user["email"]
-    
-    try:
-        user = db.query(User).filter(User.email == user_email).first()
-        if not user:
-            raise HTTPException(status_code=404, detail="User not found. Please upload resume first.")
-        
-        jobs = scrape_linkedin_jobs(
-            skills=job_search.skills,
-            location=job_search.location,
-            experience_years=job_search.experience_years,
-            max_jobs=job_search.max_jobs
-        )
-        
-        # Separate jobs by type
-        jobs_with_email = []
-        jobs_without_email = []
-        
-        for job in jobs:
-            if job.get('hr_email'):
-                jobs_with_email.append(job)
-            else:
-                jobs_without_email.append(job)
-        
-        return {
-            "status": "success",
-            "user_email": user_email,
-            "total_jobs": len(jobs),
-            "data": {
-                "jobs_with_email": jobs_with_email,
-                "jobs_without_email": jobs_without_email,
-                "direct_contact_jobs": jobs_with_email,  # Alias for frontend
-                "standard_jobs": jobs_without_email  # Alias for frontend
-            }
+    return {
+        "status": "success",
+        "message": "Job scraping temporarily disabled in production",
+        "total_jobs": 0,
+        "data": {
+            "jobs_with_email": [],
+            "jobs_without_email": [],
+            "direct_contact_jobs": [],
+            "standard_jobs": []
         }
-        
-    except Exception as e:
-        print(f"Error searching jobs: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Error searching jobs: {str(e)}")
+    }
 
 
 @app.post("/save-job")
