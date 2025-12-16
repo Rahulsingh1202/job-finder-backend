@@ -1,0 +1,42 @@
+# FastAPI and Server
+fastapi
+uvicorn[standard]
+python-multipart
+
+# PDF Processing
+pdfplumber
+pdfminer.six
+PyMuPDF
+
+# NLP and Text Processing
+nltk
+spacy
+
+# Web Scraping
+beautifulsoup4
+requests
+lxml
+
+# Database
+sqlalchemy
+
+# Google OAuth and AI
+google-auth
+google-auth-oauthlib
+google-generativeai
+
+# Authentication
+python-jose[cryptography]
+passlib[bcrypt]
+python-dotenv
+
+# Pydantic for validation
+pydantic
+pydantic-settings
+
+# Additional utilities
+python-dateutil
+
+# Email (optional)
+aiosmtplib
+email-validator
